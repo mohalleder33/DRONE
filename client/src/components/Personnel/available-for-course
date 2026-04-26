@@ -1,0 +1,27 @@
+// GET /api/personnel/available-for-course
+router.get('/available-for-course', auth, async (req, res) => {
+  const isMockMode = () => process.env.USE_MOCK_DB === 'true';
+
+  if (isMockMode()) {
+    // Mock data: all personnel who are present and not currently in a course
+    const officers = (global.mockDB?.officers || [])
+      .filter(p => p.attendanceStatus === 'present' && !p.currentCourseId);
+    const ncos = (global.mockDB?.ncos || [])
+      .filter(p => p.attendanceStatus === 'present' && !p.currentCourseId);
+    const recruits = (global.mockDB?.recruits || [])
+      .filter(p => p.attendanceStatus === 'present' && !p.currentCourseId);
+    return res.json([...officers, ...ncos, ...recruits]);
+  }
+
+  try {
+    // Real MongoDB: find all personnel with attendanceStatus 'present' and no currentCourseId
+    const officers = await Officer.find({ attendanceStatus: 'present', currentCourseId: null });
+    const ncos = await NCO.find({ attendanceStatus: 'present', currentCourseId: null });
+    const recruits = await Recruit.find({ attendanceStatus: 'present', currentCourseId: null });
+    
+    res.json([...officers, ...ncos, ...recruits]);
+  } catch (error) {
+    console.error('Error fetching available personnel:', error);
+    res.status(500).json({ message: 'فشل تحميل الكوادر المتاحة للدورة' });
+  }
+});

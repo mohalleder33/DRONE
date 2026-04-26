@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    direction: rtl;
+  }
+  body {
+    font-family: 'Tajawal', sans-serif;
+    @apply bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white;
+  }
+}
+
+/* تخصيص شريط التمرير للجداول */
+.overflow-x-auto::-webkit-scrollbar {
+  height: 8px;
+}
+.overflow-x-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+.dark .overflow-x-auto::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+.dark .overflow-x-auto::-webkit-scrollbar-thumb {
+  background: #555;
+}
